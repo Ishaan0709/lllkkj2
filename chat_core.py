@@ -8,15 +8,17 @@ from PyPDF2 import PdfReader
 from docx import Document
 import csv
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("MedMentor")
-
-# Load environment
+# Load environment variables
 load_dotenv()
 
-# Initialize OpenAI
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Get API key (from .env or Streamlit Secrets)
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("❌ OPENAI_API_KEY not found. Set it in .env or Streamlit Cloud secrets.")
+
+# Initialize OpenAI client
+client = OpenAI(api_key=api_key)
+
 
 # Enhanced user data storage
 USER_DATA = {
