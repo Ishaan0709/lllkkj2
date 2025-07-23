@@ -1,16 +1,15 @@
 import os
 import re
-from openai import OpenAI
+import openai
 from dotenv import load_dotenv
 import logging
 import tempfile
 from PyPDF2 import PdfReader
 from docx import Document
 import csv
-import logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("MedMentor")
-
 
 # Load environment variables
 load_dotenv()
@@ -20,8 +19,8 @@ api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("❌ OPENAI_API_KEY not found. Set it in .env or Streamlit Cloud secrets.")
 
-# Initialize OpenAI client
-client = OpenAI(api_key=api_key)
+# ✅ Set API key to openai module
+openai.api_key = api_key
 
 
 # Enhanced user data storage
@@ -152,12 +151,13 @@ def generate_medical_response(message, user_data, history, medical_context):
     7. Be concise (3-5 key points)
     """
     
-    response = client.chat.completions.create(
-        model="gpt-4-turbo",
-        messages=[{"role": "system", "content": prompt}],
-        temperature=0.3,
-        max_tokens=500
+    response = openai.ChatCompletion.create(
+    model="gpt-4-turbo",
+    messages=[{"role": "system", "content": prompt}],
+    temperature=0.3,
+    max_tokens=500
     )
+
     return response.choices[0].message.content
 
 def generate_reply(user_id, prompt, uploaded_files=[]):
