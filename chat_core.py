@@ -7,6 +7,10 @@ import tempfile
 from PyPDF2 import PdfReader
 from docx import Document
 import csv
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("MedMentor")
+
 
 # Load environment variables
 load_dotenv()
